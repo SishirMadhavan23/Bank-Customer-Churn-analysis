@@ -1,0 +1,141 @@
+{
+  "theme": "dark",
+  "archetype": "Archetype 4 (Swiss & High-Contrast)",
+  "context": "Enterprise Data Analytics SaaS Dashboard for Banking/Fintech",
+  "design_philosophy": {
+    "core_principles": [
+      "Objective, rigid, functional aesthetics over decorative flair.",
+      "Data clarity is paramount; the design acts strictly as a structured vessel for complex financial metrics.",
+      "High visual density utilizing a 'Control Room Grid'—maximize screen real estate without clutter.",
+      "Asymmetry and strict alignment for structural integrity. Avoid centering; stick to left-aligned geometric precision."
+    ],
+    "mood": "Authoritative, serious, transparent, high-precision, institutional."
+  },
+  "colors": {
+    "background": {
+      "main": "#050505",
+      "surface": "#101010",
+      "surface_hover": "#1A1A1A",
+      "surface_active": "#222222"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#8F8F94",
+      "tertiary": "#555555",
+      "inverse": "#000000"
+    },
+    "borders": {
+      "default": "rgba(255, 255, 255, 0.1)",
+      "strong": "rgba(255, 255, 255, 0.3)",
+      "focus": "#FFFFFF"
+    },
+    "accents": {
+      "brand": "#FFFFFF",
+      "primary_data": "#0047FF",
+      "critical_churn": "#FF3333",
+      "warning_risk": "#FFCC00",
+      "safe_retention": "#00E5FF"
+    }
+  },
+  "typography": {
+    "font_families": {
+      "heading": "IBM Plex Sans, sans-serif",
+      "body": "IBM Plex Sans, sans-serif",
+      "mono": "IBM Plex Mono, monospace"
+    },
+    "rules": {
+      "h1": "text-4xl sm:text-5xl font-black tracking-tighter uppercase text-white",
+      "h2": "text-2xl sm:text-3xl font-bold tracking-tight text-white",
+      "h3": "text-xl font-bold tracking-tight text-white",
+      "kpis": "font-mono font-light tracking-tighter text-5xl text-white",
+      "labels": "uppercase text-xs font-bold tracking-[0.2em] text-[#8F8F94]",
+      "body": "text-sm text-[#8F8F94] leading-relaxed",
+      "data_tables": "font-mono text-sm"
+    },
+    "anti_patterns": [
+      "Do NOT use Inter, Roboto, or standard sans-serif for headings.",
+      "Do NOT center align text unless explicitly inside a compact notification badge."
+    ]
+  },
+  "layout_and_spacing": {
+    "strategy": "The 'Control Room Grid' (Dense, Data Correlation, Scanability)",
+    "grid_system": "grid-cols-1 md:grid-cols-3 lg:grid-cols-4 with tight gaps (gap-1 to gap-4)",
+    "surfaces": "Cardless design. Use the 'Grid Borders' technique. Containers have flat backgrounds, 0px border radius (rounded-none), and 1px borders to expose the skeleton of the layout.",
+    "padding": "Generous internal padding (p-6 or p-8) for readability inside dense grid cells.",
+    "alignment": "Strictly left-aligned. Optical alignment over geometric."
+  },
+  "components": {
+    "general": "Customize all Shadcn components to remove rounded corners (rounded-none) and remove soft drop shadows. Replace with sharp 1px borders.",
+    "buttons": {
+      "primary": "bg-white text-black font-bold uppercase tracking-widest px-6 py-3 rounded-none hover:bg-[#E5E5E5] transition-colors",
+      "secondary": "bg-transparent border border-[rgba(255,255,255,0.3)] text-white font-bold uppercase tracking-widest px-6 py-3 rounded-none hover:border-white transition-colors",
+      "destructive": "bg-[#FF3333] text-white font-bold uppercase tracking-widest px-6 py-3 rounded-none hover:bg-[#CC0000]"
+    },
+    "inputs_and_forms": {
+      "style": "bg-[#050505] border-b-2 border-l-0 border-r-0 border-t-0 border-[rgba(255,255,255,0.2)] rounded-none text-white focus:ring-0 focus:border-white px-0 py-2",
+      "labels": "uppercase text-xs font-bold tracking-[0.2em] text-[#8F8F94] mb-2 block"
+    },
+    "charts": {
+      "library": "recharts",
+      "style_rules": "Strictly linear lines (no tension/monotone curves). Sharp area fills. High-contrast axes. Do not use generic gradient fills in charts; use solid colors or harsh opacity steps.",
+      "colors": ["#0047FF", "#FF3333", "#FFCC00", "#00E5FF", "#FFFFFF"]
+    },
+    "navigation_header": {
+      "style": "Solid background (#050505) with a hard bottom border (border-white/10). Explicit navigation links. No hamburger on desktop."
+    },
+    "data_tables": {
+      "style": "border-collapse width-full. Header cells: uppercase, tracking-wider, text-xs, border-b border-white/20. Body cells: font-mono text-sm, border-b border-white/5. Hover state: bg-[#101010]."
+    }
+  },
+  "interactions_and_motion": {
+    "hover_states": "ALWAYS explicitly set text color on hover. Use harsh background shifts (e.g., hover:bg-[#1A1A1A]) rather than soft fades.",
+    "focus_states": "High contrast solid outlines. No soft focus rings.",
+    "animations": "Minimalist. Use staggered entrance animations for lists/tables, but keep them fast (under 200ms) to maintain the 'control room' speed."
+  },
+  "icons": {
+    "library": "lucide-react or @phosphor-icons/react (Phosphor Duotone preferred for high-end look)",
+    "style": "Sharp, geometric, consistent stroke width."
+  },
+  "testing": {
+    "requirement": "All interactive and key informational elements MUST include a 'data-testid' attribute in kebab-case format (e.g., data-testid='churn-predict-button')."
+  },
+  "media": {
+    "image_urls": {
+      "customer_profiles": [
+        {
+          "url": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwxfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc4MTAwMTEyMnww&ixlib=rb-4.1.0&q=85",
+          "description": "Professional female headshot for high-risk customer profile (Customer Risk Analyzer)"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1600878459138-e1123b37cb30?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwzfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc4MTAwMTEyMnww&ixlib=rb-4.1.0&q=85",
+          "description": "Professional male headshot for medium-risk customer profile (Customer Risk Analyzer)"
+        },
+        {
+          "url": "https://images.unsplash.com/photo-1685760259914-ee8d2c92d2e0?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1ODR8MHwxfHNlYXJjaHwyfHxwcm9mZXNzaW9uYWwlMjBjb3Jwb3JhdGUlMjBoZWFkc2hvdCUyMHBvcnRyYWl0fGVufDB8fHx8MTc4MTAwMTEyMnww&ixlib=rb-4.1.0&q=85",
+          "description": "Professional female standing headshot for customer analytics"
+        },
+        {
+          "url": "https://images.pexels.com/photos/4797690/pexels-photo-4797690.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+          "description": "Professional male portrait for retention action targets"
+        }
+      ],
+      "abstract_backgrounds": [
+        {
+          "url": "https://images.unsplash.com/photo-1644088379091-d574269d422f?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NTYxODh8MHwxfHNlYXJjaHwxfHxhYnN0cmFjdCUyMGdlb21ldHJpYyUyMGRhdGElMjB2aXN1YWxpemF0aW9ufGVufDB8fHx8MTc4MTAwMTEyMnww&ixlib=rb-4.1.0&q=85",
+          "description": "Abstract geometric data visualization background, useful for login page or report covers"
+        }
+      ]
+    },
+    "rules": "Never use placeholder images (e.g., via.placeholder.com). Use the URLs provided above for customer profile pictures in the UI to give a realistic enterprise feel."
+  },
+  "instructions_to_main_agent": [
+    "1. Apply the 'Swiss Brutalist' aesthetic: High contrast, strict grid alignment, and 0px border radius (rounded-none) on ALL elements.",
+    "2. Avoid using Shadcn 'Card' wrappers if they add soft shadows or borders. Instead, construct grids with 'border-collapse' or raw 1px white/10 borders.",
+    "3. Use IBM Plex Sans for UI text and IBM Plex Mono for all numerical data/KPIs.",
+    "4. Ensure that all interactive elements, buttons, inputs, and key data points have a 'data-testid' attribute in kebab-case.",
+    "5. For charts (Recharts), strictly use 'linear' line types, sharp blocky bars, and high-contrast solid colors defined in the palette. Do NOT use gradients or curved lines.",
+    "6. Do not implement a dark/light mode toggle—this app is strictly Dark Mode (Control Room setting).",
+    "7. Rely heavily on uppercase overlines with wide tracking (tracking-[0.2em]) for field labels and widget headers.",
+    "8. Implement the Customer Risk Analyzer with the provided professional headshot media URLs. Do not use plain text initials unless no image is assigned."
+  ]
+}
