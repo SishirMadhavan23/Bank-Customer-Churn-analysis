@@ -1,0 +1,38 @@
+Project: Bank Customer Churn Analysis
+
+Purpose:
+- Analyze banking customer behavior to identify customers at risk of churning.
+- Build a repeatable pipeline for data preparation, feature engineering, modeling, and reporting.
+
+Scope:
+- Ingest and clean customer data including demographics, account activity, products, and tenure.
+- Explore churn drivers through visual analysis and summary statistics.
+- Train classification models to predict customer churn.
+- Evaluate models using business-relevant metrics such as accuracy, recall, precision, and AUC.
+- Document findings, model performance, and actionable recommendations.
+
+Key Deliverables:
+- Data ingestion and cleaning scripts.
+- Feature engineering and exploratory data analysis.
+- Trained churn prediction model(s).
+- Model evaluation and validation results.
+- Project README and spec documentation.
+
+Dataset:
+- Typical input: bank customer dataset with fields like customer ID, age, gender, tenure, balance, products, credit score, estimated salary, and churn label.
+- Expected data location: `data/` or project root if dataset files are present.
+
+Success Criteria:
+- A predictive model that identifies churners with strong performance.
+- Insights into the most important features driving churn.
+- A clear project structure for reproducibility and future extension.
+
+Assumptions:
+- Dataset includes a churn target column such as `Exited` or `Churn`.
+- Data is available in CSV format.
+- Python, pandas, and machine learning libraries (scikit-learn, seaborn, matplotlib) are used for analysis.
+
+Next Steps:
+- Add actual data files to `data/`.
+- Implement notebooks or scripts for EDA, model training, and evaluation.
+- Extend documentation with reproducible run instructions.
