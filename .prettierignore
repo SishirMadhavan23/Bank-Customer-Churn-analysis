@@ -1,0 +1,11 @@
+node_modules/
+build/
+dist/
+.next/
+coverage/
+.git/
+.venv/
+venv/
+__pycache__/
+*.egg-info/
+.DS_Store

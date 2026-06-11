@@ -1,0 +1,28 @@
+rules:
+  - id: sql-injection
+    pattern: |
+      $QUERY = $SQL_STRING
+    message: Potential SQL injection detected
+    languages: [python]
+    severity: WARNING
+
+  - id: hardcoded-passwords
+    pattern: |
+      password\s*=\s*["']
+    message: Hardcoded password detected
+    languages: [python, javascript]
+    severity: HIGH
+
+  - id: insecure-random
+    pattern: |
+      import random
+    message: Using insecure random module
+    languages: [python]
+    severity: MEDIUM
+
+  - id: eval-usage
+    pattern: |
+      eval\(
+    message: Avoid using eval()
+    languages: [python, javascript]
+    severity: HIGH

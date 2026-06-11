@@ -63,7 +63,24 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test"
+    "test": "react-scripts test",
+    "lint:js": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:js:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:py": "pylint *.py",
+    "format:prettier": "prettier --write '**/*.{js,jsx,ts,tsx,json,css,md}'",
+    "format:biome": "biome check --apply .",
+    "lint:ruff": "ruff check .",
+    "lint:ruff:fix": "ruff check . --fix",
+    "lint:mypy": "mypy . --ignore-missing-imports",
+    "lint:bandit": "bandit -r . -ll",
+    "lint:flake8": "flake8 .",
+    "lint:vulture": "vulture . --min-confidence 80",
+    "lint:semgrep": "semgrep --config=.semgrep.yml .",
+    "lint:oxlint": "oxlint .",
+    "lint:knip": "knip",
+    "lint:all": "npm run lint:js && npm run lint:py && npm run lint:ruff && npm run lint:mypy && npm run lint:bandit && npm run lint:flake8 && npm run lint:vulture",
+    "format:all": "npm run format:prettier && npm run lint:ruff:fix && npm run lint:js:fix",
+    "prepare": "husky install"
   },
   "engines": {
     "node": "20.x"
@@ -84,9 +101,15 @@
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
     "@types/lodash": "4.17.24",
     "autoprefixer": "10.4.20",
+    "biome": "^1.9.3",
     "dotenv": "16.4.5",
+    "eslint": "^9.0.0",
     "globals": "15.15.0",
+    "husky": "^9.0.11",
+    "knip": "^5.20.0",
+    "oxlint": "^0.5.0",
     "postcss": "8.4.49",
+    "prettier": "^3.3.3",
     "tailwindcss": "3.4.17"
   }
 }

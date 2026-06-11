@@ -1,0 +1,6 @@
+{
+  "entry": ["src/**/*.{js,jsx,ts,tsx}", "app.js", "api.js", "auth.jsx"],
+  "project": ["package.json"],
+  "ignore": ["node_modules", "build", "dist"],
+  "gitignore": true
+}
