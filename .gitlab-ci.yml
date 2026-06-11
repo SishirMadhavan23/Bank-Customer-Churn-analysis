@@ -1,0 +1,5 @@
+secret_scan:
+  image: zricethezav/gitleaks:latest
+  stage: security
+  script:
+    - gitleaks detect --source . --verbose
