@@ -170,7 +170,13 @@ class ChurnEngine:
             tot = len(sub)
             churn = int(sub["Exited"].sum())
             rate = round((churn / tot) * 100, 2) if tot else 0
-            out.append({"month": months[m], "churned": churn, "total": tot, "rate": rate})
+            out.append({
+                "month": months[m],
+                "churned": churn,
+                "total": tot,
+                "rate": rate,
+                "churn_rate": rate,
+            })
         return out
 
     def distribution(self, col: str, bins: int | None = None) -> list:
