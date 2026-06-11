@@ -1,6 +1,6 @@
 import React from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../lib/auth";
+import { useAuth } from "./auth";
 import {
   LayoutDashboard,
   Database,
@@ -13,9 +13,6 @@ import {
   LogOut,
   Cpu
 } from "lucide-react";
-import { NavLink, useNavigate } from "react-router-dom";
-import { useAuth } from "../lib/auth";
-import { LayoutDashboard, Database, BarChart3, TrendingDown, Brain, Search, FileText, Settings, LogOut, Cpu } from "lucide-react";
 
 const links = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, testid: "nav-dashboard" },
