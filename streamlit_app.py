@@ -78,7 +78,8 @@ with tabs[0]:
     st.subheader("Monthly Churn Signal")
     monthly_df = pd.DataFrame(engine.monthly_trend())
     st.dataframe(monthly_df, use_container_width=True)
-    st.line_chart(monthly_df.set_index("month")["churn_rate"])
+    if not monthly_df.empty and {"month", "rate"}.issubset(monthly_df.columns):
+        st.line_chart(monthly_df.set_index("month")["rate"])
 
 with tabs[1]:
     st.subheader("Dataset Preview")
