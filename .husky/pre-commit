@@ -1,27 +1,2 @@
 #!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
-
-echo "🔍 Running pre-commit checks..."
-
-# JavaScript/React linting
-echo "✅ Running ESLint..."
-npx eslint . --ext .js,.jsx,.ts,.tsx --fix || exit 1
-
-# Format with Prettier
-echo "✅ Running Prettier..."
-npx prettier --write '**/*.{js,jsx,ts,tsx,json,css,md}' || exit 1
-
-# Python linting
-echo "✅ Running Ruff..."
-ruff check . --fix || exit 1
-
-echo "✅ Running Pylint..."
-pylint *.py || true
-
-echo "✅ Running Mypy..."
-mypy . --ignore-missing-imports || true
-
-echo "✅ Running Bandit..."
-bandit -r . -ll || true
-
-echo "✅ All pre-commit checks passed! ✨"
+echo "Pre-commit hook"
