@@ -1,24 +1,21 @@
 """Customer Churn Prediction & Analytics API."""
-import os
-import io
 import logging
+import os
 import uuid
-import jwt
-import bcrypt
-from datetime import datetime, timezone, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import List, Optional
 
-import pandas as pd
-from fastapi import FastAPI, APIRouter, HTTPException, Depends, UploadFile, File, Header
-from fastapi.responses import StreamingResponse
+import bcrypt
+import jwt
 from dotenv import load_dotenv
-from starlette.middleware.cors import CORSMiddleware
+from fastapi import APIRouter, Depends, FastAPI, File, Header, HTTPException, UploadFile
+from fastapi.responses import StreamingResponse
 from motor.motor_asyncio import AsyncIOMotorClient
-from pydantic import BaseModel, Field, ConfigDict, EmailStr
+from pydantic import BaseModel, EmailStr
+from starlette.middleware.cors import CORSMiddleware
 
-from ml_engine import engine, init_engine, DEFAULT_CSV
-from reports import build_pdf_report, build_excel_export
+from ml_engine import DEFAULT_CSV, engine, init_engine
+from reports import build_excel_export, build_pdf_report
 
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / ".env")
@@ -71,7 +68,7 @@ class AIRecRequest(BaseModel):
 
 class ChatIn(BaseModel):
     message: str
-    session_id: Optional[str] = None
+    session_id: str | None = None
 
 
 # ============ AUTH ============
@@ -84,7 +81,7 @@ def make_token(email: str, role: str = "admin") -> str:
     return jwt.encode(payload, JWT_SECRET, algorithm="HS256")
 
 
-async def current_user(authorization: Optional[str] = Header(None)):
+async def current_user(authorization: str | None = Header(None)):
     if not authorization or not authorization.startswith("Bearer "):
         raise HTTPException(status_code=401, detail="Missing token")
     token = authorization.split(" ", 1)[1]
@@ -92,7 +89,7 @@ async def current_user(authorization: Optional[str] = Header(None)):
         data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
         return data
     except jwt.PyJWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(status_code=401, detail="Invalid token") from None
 
 
 async def ensure_default_admin():
@@ -165,6 +162,8 @@ async def dataset_cleaning():
 
 @api.get("/dataset/history")
 async def dataset_history(user=Depends(current_user)):
+    # user unused but required for auth
+    _ = user
     docs = await db.dataset_uploads.find({}, {"_id": 0}).sort("uploaded_at", -1).to_list(100)
     return docs
 
@@ -178,7 +177,7 @@ async def dataset_upload(file: UploadFile = File(...), user=Depends(current_user
     try:
         engine.load_csv(path, source_label=file.filename)
     except Exception as e:
-        raise HTTPException(status_code=400, detail=f"Failed to load CSV: {e}")
+        raise HTTPException(status_code=400, detail=f"Failed to load CSV: {e}") from e
     doc = {
         "id": str(uuid.uuid4()),
         "filename": file.filename,
@@ -272,6 +271,7 @@ async def predict(body: PredictIn):
 
 @api.get("/predict/logs")
 async def prediction_logs(limit: int = 50, user=Depends(current_user)):
+    _ = user  # user unused but required for auth
     docs = await db.prediction_logs.find({}, {"_id": 0}).sort("timestamp", -1).to_list(limit)
     return docs
 
@@ -375,6 +375,7 @@ async def ai_chat(body: ChatIn):
 # ============ EMAIL ALERTS (simulated) ============
 @api.post("/alerts/send")
 async def send_alert(body: dict, user=Depends(current_user)):
+    _ = user  # user unused but required for auth
     doc = {
         "id": str(uuid.uuid4()),
         "customer_id": body.get("customer_id"),
@@ -389,6 +390,7 @@ async def send_alert(body: dict, user=Depends(current_user)):
 
 @api.get("/alerts")
 async def list_alerts(user=Depends(current_user)):
+    _ = user  # user unused but required for auth
     return await db.alerts.find({}, {"_id": 0}).sort("sent_at", -1).to_list(100)
 
 

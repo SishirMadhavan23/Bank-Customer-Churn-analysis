@@ -1,8 +1,8 @@
 """PDF and Excel report generation for churn analytics."""
 import io
-from typing import Optional
+
 import pandas as pd
-import numpy as np
+
 from ml_engine import ChurnEngine
 
 
@@ -10,10 +10,10 @@ def build_pdf_report(engine: ChurnEngine) -> io.BytesIO:
     """Generate a PDF report from engine data.
     Uses reportlab if available, otherwise creates a minimal report."""
     try:
+        from reportlab.lib import colors
         from reportlab.lib.pagesizes import A4
         from reportlab.lib.styles import getSampleStyleSheet
-        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
-        from reportlab.lib import colors
+        from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
     except ImportError:
         # Fallback: return a placeholder bytes buffer
         buf = io.BytesIO()

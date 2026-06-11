@@ -1,14 +1,13 @@
 """"ML engine for churn prediction - loads dataset, trains model, exposes prediction."""
-import os
 from pathlib import Path
-import pandas as pd
+
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.linear_model import LogisticRegression
-from sklearn.preprocessing import StandardScaler
+import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, roc_auc_score
+from sklearn.preprocessing import StandardScaler
 
 DATA_DIR = Path(__file__).parent / "data"
 DEFAULT_CSV = DATA_DIR / "Churn_Modelling.csv"
@@ -82,7 +81,7 @@ class ChurnEngine:
             "train_rows": int(len(X_train)),
             "test_rows": int(len(X_test)),
         }
-        imp = list(zip(feature_cols, model.feature_importances_))
+        imp = list(zip(feature_cols, model.feature_importances_, strict=False))
         imp.sort(key=lambda x: x[1], reverse=True)
         self.feature_importance = [{"feature": f, "importance": float(v)} for f, v in imp]
         # KMeans segmentation (4 clusters)
@@ -356,4 +355,4 @@ engine = ChurnEngine()
 def init_engine():
     if DEFAULT_CSV.exists():
         engine.load_csv(DEFAULT_CSV, source_label="Churn_Modelling.csv")
-    return engine 
+    return engine

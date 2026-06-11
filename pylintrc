@@ -1,7 +1,7 @@
-[MASTER]
-disable = C0330,C0326,C0103,R0913,R0914,W0212
+[MAIN]
+disable = C0103,R0913,R0914,W0212
 
 [DESIGN]
 max-attributes = 7
 max-locals = 20
-max-arguments = 10
+max-args = 10

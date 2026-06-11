@@ -3,7 +3,6 @@ import streamlit as st
 
 from ml_engine import DEFAULT_CSV, ChurnEngine
 
-
 st.set_page_config(
     page_title="Bank Customer Churn Analysis",
     page_icon="",
@@ -67,7 +66,7 @@ with tabs[0]:
 
     st.subheader("Model Metrics")
     model_cols = st.columns(5)
-    for col, key in zip(model_cols, ["accuracy", "precision", "recall", "f1", "roc_auc"]):
+    for col, key in zip(model_cols, ["accuracy", "precision", "recall", "f1", "roc_auc"], strict=False):
         col.metric(key.replace("_", " ").title(), f"{engine.metrics.get(key, 0):.3f}")
 
     st.subheader("Feature Importance")
