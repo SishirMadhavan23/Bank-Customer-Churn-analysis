@@ -1,11 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { api } from "./api";
 import { MessageSquare, X, Send, Loader2 } from "lucide-react";
 
 export default function Chatbot() {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [msgs, setMsgs] = useState([
-    { role: "assistant", text: "Hello — I'm RetainAI. Ask me about churn patterns, retention strategies, or specific KPIs." },
+    { role: "assistant", text: t("chatbot.greeting") },
   ]);
   const [text, setText] = useState("");
   const [session, setSession] = useState(null);
@@ -21,7 +23,7 @@ export default function Chatbot() {
       setSession(data.session_id);
       setMsgs((m) => [...m, { role: "assistant", text: data.response }]);
     } catch (e) {
-      setMsgs((m) => [...m, { role: "assistant", text: "Sorry, the assistant is offline." }]);
+      setMsgs((m) => [...m, { role: "assistant", text: t("chatbot.offline") }]);
     } finally { setLoading(false); }
   };
 
@@ -33,15 +35,15 @@ export default function Chatbot() {
           onClick={() => setOpen(true)}
           className="fixed bottom-6 right-6 z-40 bg-white text-black px-4 py-3 flex items-center gap-2 text-xs uppercase tracking-widest font-bold hover:bg-[#E5E5E5]"
         >
-          <MessageSquare size={14} /> Ask RetainAI
+          <MessageSquare size={14} /> {t("chatbot.ask")}
         </button>
       )}
       {open && (
         <div className="fixed bottom-6 right-6 z-40 w-[380px] h-[520px] bg-[#0A0A0A] border border-white/15 flex flex-col">
           <div className="px-4 py-3 border-b border-white/10 flex items-center justify-between">
             <div>
-              <div className="text-[10px] uppercase tracking-[0.25em] text-[#8F8F94]">Assistant</div>
-              <div className="text-sm font-bold tracking-tight">RetainAI Co-pilot</div>
+              <div className="text-[10px] uppercase tracking-[0.25em] text-[#8F8F94]">{t("chatbot.assistant")}</div>
+              <div className="text-sm font-bold tracking-tight">{t("chatbot.copilot")}</div>
             </div>
             <button data-testid="chatbot-close-btn" onClick={() => setOpen(false)} className="text-[#8F8F94] hover:text-white"><X size={16} /></button>
           </div>
@@ -51,7 +53,7 @@ export default function Chatbot() {
                 <div className={`inline-block max-w-[85%] text-xs leading-relaxed ${m.role === "user" ? "bg-white text-black px-3 py-2" : "border border-white/15 px-3 py-2 text-white"}`}>{m.text}</div>
               </div>
             ))}
-            {loading && <div className="flex items-center gap-2 text-xs text-[#8F8F94]"><Loader2 size={14} className="animate-spin" /> Thinking…</div>}
+            {loading && <div className="flex items-center gap-2 text-xs text-[#8F8F94]"><Loader2 size={14} className="animate-spin" /> {t("chatbot.thinking")}</div>}
           </div>
           <div className="border-t border-white/10 p-3 flex gap-2">
             <input
@@ -59,7 +61,7 @@ export default function Chatbot() {
               value={text}
               onChange={(e) => setText(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && send()}
-              placeholder="Ask about churn…"
+              placeholder={t("chatbot.placeholder")}
               className="flex-1 bg-[#050505] border border-white/15 px-3 py-2 text-xs focus:outline-none focus:border-white font-mono"
             />
             <button data-testid="chatbot-send-btn" onClick={send} className="bg-white text-black px-3 hover:bg-[#E5E5E5]"><Send size={14} /></button>

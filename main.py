@@ -14,6 +14,12 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from pydantic import BaseModel, EmailStr
 from starlette.middleware.cors import CORSMiddleware
 
+from local_ai import (
+    LANGUAGES,
+    chat_response,
+    detect_language,
+    recommendations_response,
+)
 from ml_engine import DEFAULT_CSV, engine, init_engine
 from reports import build_excel_export, build_pdf_report
 
@@ -293,75 +299,34 @@ async def customer_detail(customer_id: int):
     return data
 
 
-# ============ AI RECOMMENDATIONS & CHATBOT ============
-async def _llm_chat(system: str, user_text: str, session: str) -> str:
-    try:
-        from emergentintegrations.llm.chat import LlmChat, UserMessage
-        chat = LlmChat(
-            api_key=EMERGENT_LLM_KEY,
-            session_id=session,
-            system_message=system,
-        ).with_model("anthropic", "claude-sonnet-4-5-20250929")
-        resp = await chat.send_message(UserMessage(text=user_text))
-        return str(resp)
-    except Exception as e:
-        logger.exception("LLM call failed")
-        return f"AI unavailable right now ({e}). Fallback recommendations applied."
+
+
+# ============ AI RECOMMENDATIONS & CHATBOT (Local AI + Multi-lingual) ============
+@api.get("/ai/languages")
+async def ai_languages():
+    """Return supported languages."""
+    return {"languages": LANGUAGES, "default": "en"}
 
 
 @api.post("/ai/recommendations")
-async def ai_recommendations(body: AIRecRequest):
-    system = (
-        "You are a senior banking retention strategist. Given a customer's profile and churn prediction, "
-        "output a concise, actionable retention plan as JSON with keys: "
-        "offers (list of 4-6 short bullet strings — e.g. 'Special low-interest loan offer', 'Reduce account charges', 'Reward bonus points', 'Premium membership upgrade', 'Personalized banking advisor'), "
-        "explanation (2-3 sentences explaining WHY the customer may churn — explainable AI), "
-        "priority_actions (list of 3 concrete next steps the relationship manager should take in 7 days). "
-        "Return ONLY valid JSON, no prose, no markdown fences."
-    )
-    user_text = f"Customer profile: {body.profile}\nPrediction: {body.prediction}"
-    text = await _llm_chat(system, user_text, f"rec-{uuid.uuid4()}")
-    # Try to parse JSON
-    import json as _json
-    cleaned = text.strip()
-    if cleaned.startswith("```"):
-        cleaned = cleaned.strip("`")
-        if cleaned.lower().startswith("json"):
-            cleaned = cleaned[4:]
-    try:
-        data = _json.loads(cleaned)
-    except Exception:
-        # Fallback structured rec
-        risk = body.prediction.get("risk_level", "Medium")
-        data = {
-            "offers": [
-                "Special low-interest personal loan offer",
-                "Waive monthly account maintenance charges",
-                "Boost rewards & cashback on debit transactions",
-                "Personalized banking advisor allocation",
-                "Premium membership upgrade trial (3 months)",
-            ],
-            "explanation": f"Customer shows {risk}-risk churn signals from the model. Engage proactively.",
-            "priority_actions": [
-                "Outreach call within 48 hours",
-                "Send a tailored retention offer email",
-                "Schedule a financial review meeting",
-            ],
-        }
+async def ai_recommendations(
+    body: AIRecRequest,
+    accept_language: str = Header(None),
+):
+    lang = detect_language({"accept-language": accept_language})
+    data = await recommendations_response(body.profile, body.prediction, lang)
     return data
 
 
 @api.post("/ai/chat")
-async def ai_chat(body: ChatIn):
+async def ai_chat(
+    body: ChatIn,
+    accept_language: str = Header(None),
+):
     session = body.session_id or str(uuid.uuid4())
     kpis = engine.kpis() if engine.df is not None else {}
-    system = (
-        "You are RetainAI — an analytics assistant embedded inside a customer churn prediction dashboard for a retail bank. "
-        f"Current dataset KPIs: {kpis}. "
-        "Answer concisely (2-4 sentences) about churn, retention strategies, dataset stats, "
-        "or predictions. Be specific and actionable. Avoid markdown lists unless necessary."
-    )
-    text = await _llm_chat(system, body.message, session)
+    lang = detect_language({"accept-language": accept_language})
+    text = await chat_response(body.message, kpis, lang)
     await db.chat_history.insert_one({
         "id": str(uuid.uuid4()),
         "session_id": session,
