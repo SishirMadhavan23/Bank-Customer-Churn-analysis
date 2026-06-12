@@ -1,25 +1,2 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import "./index.css";
+// This file is kept for compatibility. CRA uses src/index.js as entry point.
 import "./src/i18n";
-import App from "./app";
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 60_000,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-    </QueryClientProvider>
-  </React.StrictMode>,
-);
-

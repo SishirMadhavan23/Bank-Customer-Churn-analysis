@@ -1,19 +1,31 @@
+import React from "react";
 import { useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import axios from "axios";
 import "./app.css";
+import "./i18n";
 import { HOME } from "./constants/testIds";
+import Shell from "./shell";
+import Chatbot from "./chatbot";
+import { AuthProvider } from "./auth";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: { staleTime: 60_000, refetchOnWindowFocus: false },
+  },
+});
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const API = `${BACKEND_URL}/api`;
 
-const Home = () => {
+const Dashboard = () => {
   const helloWorldApi = async () => {
     try {
       const response = await axios.get(`${API}/`);
       console.log(response.data.message);
     } catch (e) {
-      console.error(e, `errored out requesting / api`);
+      console.error(e, "errored out requesting / api");
     }
   };
 
@@ -44,13 +56,26 @@ const Home = () => {
 
 function App() {
   return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Home />} />
-        </Routes>
-      </BrowserRouter>
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Shell>
+            <Routes>
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/dataset" element={<Dashboard />} />
+              <Route path="/analytics" element={<Dashboard />} />
+              <Route path="/churn-analysis" element={<Dashboard />} />
+              <Route path="/predict" element={<Dashboard />} />
+              <Route path="/risk" element={<Dashboard />} />
+              <Route path="/reports" element={<Dashboard />} />
+              <Route path="/admin" element={<Dashboard />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
+            </Routes>
+            <Chatbot />
+          </Shell>
+        </BrowserRouter>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
