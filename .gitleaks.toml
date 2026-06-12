@@ -1,0 +1,6 @@
+title = "Bank Customer Churn Analysis"
+
+[allowlist]
+paths = [
+  ".env.example"
+]

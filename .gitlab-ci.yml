@@ -1,0 +1,15 @@
+stages:
+  - test
+  - security
+
+test:
+  image: python:3.11
+  stage: test
+  script:
+    - pytest
+
+secret_scan:
+  image: zricethezav/gitleaks:latest
+  stage: security
+  script:
+    - gitleaks detect --source . --verbose
